@@ -77,19 +77,22 @@ contract ContractTest is Test {
     }
     
     function testCanMintCorrectly() public {
-
+        
+        //Minting 1 NFT with account1
         vm.startPrank(account1);
         vm.deal(account1, 1 ether);
         nftContract.mint{value: mintPrice}();
         vm.stopPrank();
 
+        //Minting 3 NFts with account2
         vm.startPrank(account2);
         vm.deal(account2, 1 ether);
         nftContract.mint{value: mintPrice * 3}(3);
         vm.stopPrank();
 
-        assertEq(account1.balance, 1 ether - 0.01 ether);
-        assertEq(account2.balance, 1 ether - 0.03 ether);
+        //Checking their balances after minting
+        assertEq(nftContract.balanceOf(account1), 1);
+        assertEq(nftContract.balanceOf(account2), 3);
 
     }
 
