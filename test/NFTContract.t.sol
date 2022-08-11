@@ -10,6 +10,7 @@ contract ContractTest is Test {
     address owner = address(0x1234);
     address account1 = address(0x1111);
     address account2 = address(0x7777);
+    uint mintPrice = 0.01 ether;
 
     function setUp() public {
         //Setting the owner as the deployer of the contract
@@ -25,7 +26,7 @@ contract ContractTest is Test {
         vm.deal(account1, 1.1 ether);
         //Looping and calling mint function 101 times
         for(uint i = 0; i < 101; i++){
-            nftContract.mint{value: nftContract.MINT_PRICE()}();
+            nftContract.mint{value: mintPrice}();
         }
         vm.stopPrank();
 
@@ -37,7 +38,7 @@ contract ContractTest is Test {
         //Giving account2 a balance of 1 ether;
         vm.deal(account2, 1 ether);
         //Minting with provided amount twice less than the mint price
-        nftContract.mint{value: nftContract.MINT_PRICE() / 2}();
+        nftContract.mint{value: mintPrice / 2}();
         vm.stopPrank();
     
     }
@@ -48,7 +49,7 @@ contract ContractTest is Test {
         //Giving account1 a balance of 1 ether;
         vm.deal(account1, 1 ether);
         //Minting 6 NFTs in one transaction
-        nftContract.mint{value: nftContract.MINT_PRICE() * 6}(6);
+        nftContract.mint{value: mintPrice * 6}(6);
         vm.stopPrank();
 
     }
@@ -59,7 +60,7 @@ contract ContractTest is Test {
         //Giving account2 a balance of 1 ether;
         vm.deal(account2, 1 ether);
         //Minting 1 NFT
-        nftContract.mint{value: nftContract.MINT_PRICE()}();
+        nftContract.mint{value: mintPrice}();
         vm.stopPrank();
         
         //Minted 1 NFT => balance of contract = 0.01 ether
@@ -75,5 +76,22 @@ contract ContractTest is Test {
                 
     }
     
+    function testCanMintCorrectly() public {
+
+        vm.startPrank(account1);
+        vm.deal(account1, 1 ether);
+        nftContract.mint{value: mintPrice}();
+        vm.stopPrank();
+
+        vm.startPrank(account2);
+        vm.deal(account2, 1 ether);
+        nftContract.mint{value: mintPrice * 3}(3);
+        vm.stopPrank();
+
+        assertEq(account1.balance, 1 ether - 0.01 ether);
+        assertEq(account2.balance, 1 ether - 0.03 ether);
+
+    }
+
 
 }
