@@ -53,6 +53,27 @@ contract ContractTest is Test {
 
     }
     
+    function testOwnerWithdraw() public {
+        //Setting account2 as the caller of the mint function
+        vm.startPrank(account2);
+        //Giving account2 a balance of 1 ether;
+        vm.deal(account2, 1 ether);
+        //Minting 1 NFT
+        nftContract.mint{value: nftContract.MINT_PRICE()}();
+        vm.stopPrank();
+        
+        //Minted 1 NFT => balance of contract = 0.01 ether
+
+        //Setting owner as the caller of the withdraw function
+        vm.startPrank(owner);
+        //Calling withdraw function
+        nftContract.withdraw();
+        vm.stopPrank();
+
+        //Asserting that owner has a balance of 0.01 ether
+        assertEq(owner.balance, 0.01 ether);
+                
+    }
     
 
 }
