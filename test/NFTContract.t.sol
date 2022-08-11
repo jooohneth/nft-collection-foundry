@@ -23,7 +23,7 @@ contract ContractTest is Test {
         vm.startPrank(account1);
         //Giving account1 a balance of 1.1 ether
         vm.deal(account1, 1.1 ether);
-        //Looping and calling mint function 101 times => should lead to an error, since 100 is the max supply
+        //Looping and calling mint function 101 times
         for(uint i = 0; i < 101; i++){
             nftContract.mint{value: nftContract.MINT_PRICE()}();
         }
@@ -40,6 +40,17 @@ contract ContractTest is Test {
         nftContract.mint{value: nftContract.MINT_PRICE() / 2}();
         vm.stopPrank();
     
+    }
+
+    function testFailMaxPerTransaction() public {
+        //Setting account1 as the caller of the mint function
+        vm.startPrank(account1);
+        //Giving account1 a balance of 1 ether;
+        vm.deal(account1, 1 ether);
+        //Minting 6 NFTs in one transaction
+        nftContract.mint{value: nftContract.MINT_PRICE() * 6}(6);
+        vm.stopPrank();
+
     }
     
     
