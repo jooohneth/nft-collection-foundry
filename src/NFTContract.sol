@@ -9,12 +9,12 @@ import "openzeppelin-contracts/contracts/utils/Counters.sol";
 contract NFTContract is ERC721URIStorage, Ownable{
     //Creating counter to keep track of the number of NFTs minted
     using Counters for Counters.Counter;
-    Counters.Counter private tokenIds;
+    Counters.Counter public tokenIds;
 
     //Declaring constant variables
-    uint private constant MAX_SUPPLY = 100; //max supply
-    uint private constant MINT_PRICE = 0.01 ether; //price of 1 nft
-    uint private constant MAX_AMOUNT_PER_TRANSACTION = 5; //max amount of nfts allowed per transaction
+    uint public constant MAX_SUPPLY = 100; //max supply
+    uint public constant MINT_PRICE = 0.01 ether; //price of 1 nft
+    uint public constant MAX_AMOUNT_PER_TRANSACTION = 5; //max amount of nfts allowed per transaction
     string private constant TOKEN_URI = "ipfs://QmYEhCEARig7Ur1Qkf5YwJtTZmfjTyXWbcDTzi5axqjLaU"; //token uri, metadata uploaded to ipfs using pinata
 
     //Setting the name and symbol of the NFT
