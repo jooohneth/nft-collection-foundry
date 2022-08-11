@@ -31,6 +31,16 @@ contract ContractTest is Test {
 
     }
 
+    function testFailMintPrice() public {
+        //Setting account2 as the caller of the mint function
+        vm.startPrank(account2);
+        //Giving account2 a balance of 1 ether;
+        vm.deal(account2, 1 ether);
+        //Minting with provided amount twice less than the mint price
+        nftContract.mint{value: nftContract.MINT_PRICE() / 2}();
+        vm.stopPrank();
+    
+    }
     
     
 
